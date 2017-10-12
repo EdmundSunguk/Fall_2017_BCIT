@@ -1,40 +1,42 @@
 #include <stdio.h>
 #include <ctype.h>
 #include <string.h>
-#include <stdlib.h>
 #define LINESIZE 1024
 
 int get_word(const char prompt[], char word[], size_t n);
 int is_valid_id(const char s[]);
 int get_int(const char prompt[], int *p);
+int is_valid_score(const int i);
+int get_id(char id[]);
+int get_score(int *i);
 
 int main(void) {
 
-    char prompt1[] = "Enter the student ID: ";
-    char prompt2[] = "Enter the grades of the student: ";
-    size_t n = 10;
     char studentId[10];
     int grade = 0;
     int *gradeP = &grade;
+    FILE *fp;
 
-    do {
-        get_word(prompt1, studentId, n);
-    } while (!is_valid_id(studentId));
-    
-    get_int(prompt2, gradeP);
-    
-    FILE *file = fopen("lab05.txt", "a");
-    if (file == NULL) {
-        printf("Error opening file!\n");
-        exit(1);
+    /*open the file*/
+    if ((fp = fopen("lab05.txt", "w")) == 0) {
+        perror("fopen");
+        return 1;
     }
     
-    fprintf(file, "%s %3d ", studentId, grade);
+    while(get_id(studentId) && get_score(gradeP)) {    
+        
+        studentId[0] = 'a';
+        fprintf(fp, "%s %3d ", studentId, grade);
+        
+    }
     
-    fclose(file);
+    /*close the file*/
+    if (fclose(fp) != 0) {
+        perror("fclose");
+        return 1;
+    }
 
-
-return 0;
+    return 0;
 }
 
 /*
@@ -85,25 +87,60 @@ int is_valid_id(const char s[]) {
 }
 
 /*
-    if an integer is successfully read from stdin, it is passed back to the caller via the pointer p & the function returns 1; if the user presses the end-of-file key, the function returns 0
+if an integer is successfuly read from stdin, it is passed back to the caller via the pointer p & the function returns 1; if the user presses the end-of-file key, the function returns 0
 */
 int get_int(const char prompt[], int *p) {
-
-    int temp = 0;
-
     char line[LINESIZE];
-    while (1) {
+    int tempInt = 0;
+
+    while(1) {
         printf("%s", prompt);
         if(!fgets(line, LINESIZE, stdin)) {
             clearerr(stdin);
             return 0;
         }
-        if((sscanf(line, "%d", &temp) == 1) 
-            && (temp >= 0 && temp <= 100)) {
-            *p = temp;
+        if((sscanf(line, "%d", &tempInt) == 1)) {
+            *p = tempInt;
             return 1;
         }
-    }    
-
+    }
 }
+
+/*
+returns 1 if score is valid
+*/
+int is_valid_score(const int i) {
+    
+    if (i >= 0 && i <= 100) {
+        return 1;
+    }
+    return 0;
+}
+
+int get_id(char id[]) {
+
+    while (get_word("Enter the student ID: ", id, 10)) {
+        if (is_valid_id(id)) {
+            return 1;
+        }
+    }
+    return 0;
+}
+
+int get_score(int *i) {
+    
+    while (get_int("Enter the grades of the student: ", i)) {
+        if (is_valid_score(*i)) {
+            return 1;
+        }
+    }
+    return 0;
+}
+
+/*
+The second program opens the file for reading & then repeatedly prompts the user for an integer that specifies the number of the record to display. (use get_int to read this number from the user.)
+Records in the file are regarded as numbered, starting from 1. So the first pair of ID & score in the file has recod number 1. If the user enters an invalid record number (e.g., a negative integer or an integer bigger than the record number of the last record), it is simply ignored. The program terminates when the user presses the "end-of-file" key.
+You must use a seek operation to jump to the record you want to read. Use a suitable output format when displaying the record
+*/
+
 

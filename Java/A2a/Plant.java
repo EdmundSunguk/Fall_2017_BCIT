@@ -1,6 +1,10 @@
 package ca.bcit.comp2526.a2a;
 
 import java.awt.Color;
+import java.awt.Component;
+import java.awt.Graphics;
+
+import javax.swing.JComponent;
 
 /**
  * Plant.java
@@ -12,6 +16,7 @@ import java.awt.Color;
 public class Plant extends Cell {
 
     private static final Color PLANT_COLOR = Color.green;
+    private static final Color LINE_COLOR = Color.black;
     private World world;
     private Cell location;
     private int row;
@@ -27,6 +32,14 @@ public class Plant extends Cell {
         column = location.getColumn();
         world = location.getWorld();
         this.location = location;
+        repaint();
+    }
+    
+    public void paintComponent(Graphics g) {
+        g.setColor(PLANT_COLOR);
+        g.fillRect(0, 0, row, column);
+        g.setColor(LINE_COLOR);
+        g.drawRect(0, 0, row, column);
     }
     
     public void init() {

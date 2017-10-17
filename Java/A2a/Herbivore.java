@@ -1,6 +1,7 @@
 package ca.bcit.comp2526.a2a;
 
 import java.awt.Color;
+import java.awt.Graphics;
 
 /**
  * Herbivore.java
@@ -11,7 +12,8 @@ import java.awt.Color;
  */
 public class Herbivore extends Cell {
 
-    private static final Color PLANT_COLOR = Color.yellow;
+    private static final Color HERBIVORE_COLOR = Color.yellow;
+    private static final Color LINE_COLOR = Color.black;
     private World world;
     private Cell location;
     private int row;
@@ -29,8 +31,14 @@ public class Herbivore extends Cell {
         column = location.getColumn();
     }
     
+    public void paintComponent(Graphics g) {
+        g.setColor(HERBIVORE_COLOR);
+        g.fillRect(0, 0, row, column);
+        g.setColor(LINE_COLOR);
+        g.drawRect(0, 0, row, column);
+    }
+    
     public void setCell(Cell location) {
-        
     }
     
     public void move() {

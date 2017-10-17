@@ -1,7 +1,9 @@
 package ca.bcit.comp2526.a2a;
 
-import java.awt.Component;
+import java.awt.Color;
+import java.awt.Graphics;
 import java.awt.Point;
+import javax.swing.JPanel;
 
 /**
  * Cell.java
@@ -10,10 +12,10 @@ import java.awt.Point;
  * @author Sunguk (Edmund) Ham, A00979841
  * @version 1.0
  */
-public class Cell extends Component {
+public class Cell extends JPanel {
     
-    private static final float PLANT_PERCENTAGE = 0.3f;
-    private static final float HERBIVORE_PERCENTAGE = 0.2f;
+    private static final Color BACKGROUND_COLOR = Color.white;
+    private static final Color LINE_COLOR = Color.black;
     private final int row;
     private final int column;
     private final World world;
@@ -33,6 +35,13 @@ public class Cell extends Component {
         column = yCoordinate;
         location = new Point(row, column);
         this.world = world;
+    }
+    
+    public void paintComponent(Graphics g) {
+        g.setColor(BACKGROUND_COLOR);
+        g.fillRect(0, 0, row, column);
+        g.setColor(LINE_COLOR);
+        g.drawRect(0, 0, row, column);
     }
     
     /**

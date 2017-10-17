@@ -1,5 +1,8 @@
 package ca.bcit.comp2526.a2a;
 
+import java.awt.Dimension;
+import java.awt.Toolkit;
+
 /**
  * World.java
  * World class that construct the world of cells.
@@ -12,9 +15,12 @@ public class World {
     private static final int MAX_PERCENTAGE = 100;
     private static final int PERCENTAGE_HERBIVORE = 80;
     private static final int PERCENTAGE_PLANT = 50;
-    private final int row;
-    private final int column;
+    private static final Toolkit TOOLKIT = Toolkit.getDefaultToolkit();;
+    private final int width;
+    private final int height;
     private final Cell[][] cell;
+    private int worldSizeRow;
+    private int worldSizeColumn;
 
     /**
      * Constructor that creates the world.
@@ -22,25 +28,16 @@ public class World {
      * @param worldSize2 height of the world
      */
     public World(int worldSize, int worldSize2) {
-        this.row = worldSize;
-        this.column = worldSize2;
-        cell = new Cell[this.row][this.column];
         
-        for (int i = 0; i < this.row; i++) {
-            for (int j = 0; j < this.column; j++) {
-                if (RandomGenerator.nextNumber(MAX_PERCENTAGE) 
-                        >= PERCENTAGE_HERBIVORE) {
-                    cell[i][j] = new Herbivore(new Cell(this,
-                            this.row, this.column));                    
-                } else if (RandomGenerator.nextNumber(MAX_PERCENTAGE) 
-                        >= PERCENTAGE_PLANT) {
-                    cell[i][j] = new Plant(new Cell(this,
-                            this.row, this.column));
-                } else {
-                    cell[i][j] = new Cell(this, this.row, this.column);
-                }
-            }
-        }
+        final Dimension screenSize;
+        screenSize = TOOLKIT.getScreenSize();
+        width = screenSize.width / worldSize2;
+        height = screenSize.height / worldSize;
+        this.worldSizeRow = worldSize2;
+        this.worldSizeColumn = worldSize;
+        
+        cell = new Cell[worldSizeColumn][worldSizeRow];
+        
         
         
     }
@@ -49,6 +46,20 @@ public class World {
      * initializes world objects.
      */
     public void init() {
+        for (int i = 0; i < worldSizeColumn; i++) {
+            for (int j = 0; j < worldSizeRow; j++) {
+                int randomNumber = RandomGenerator.nextNumber(MAX_PERCENTAGE);
+                if (randomNumber >= PERCENTAGE_HERBIVORE) {
+                    cell[i][j] = new Herbivore(new Cell(this,
+                            width, height));
+                } else if (randomNumber >= PERCENTAGE_PLANT) {
+                    cell[i][j] = new Plant(new Cell(this,
+                            width, height));
+                } else {
+                    cell[i][j] = new Cell(this, width, height);
+                }
+            }
+        }
     }
 
     /**
@@ -56,7 +67,7 @@ public class World {
      * @return row number
      */
     public int getRowCount() {
-        return this.row;
+        return worldSizeRow;
     }
 
     /**
@@ -64,7 +75,7 @@ public class World {
      * @return column number
      */
     public int getColumnCount() {
-        return this.column;
+        return worldSizeColumn;
     }
 
     /**
@@ -74,12 +85,13 @@ public class World {
      * @return one element of the cell array
      */
     public Cell getCellAt(int rowInput, int colInput) {
-        return cell[rowInput][colInput];
+        return cell[colInput][rowInput];
     }
 
     /**
      * removes dead herbivores, checks each plant to see if it seeds
-     * and then moves remaining living Herbivores one Cell (and they eat, if possible)
+     * and then moves remaining living Herbivores one Cell.
+     * (and they eat, if possible)
      */
     public void takeTurn() {
         // TODO Auto-generated method stub

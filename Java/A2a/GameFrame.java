@@ -31,12 +31,12 @@ public class GameFrame extends JFrame {
      * initializes GameFrame.
      */
     public void init() {
-        setTitle("Assignment 2a");
-        setLayout(new GridLayout(world.getRowCount(), world.getColumnCount()));
+        setTitle("Assignment 2aMine");
+        setLayout(new GridLayout(world.getColumnCount(), world.getRowCount()));
 
-        for (int row = 0; row < world.getRowCount(); row++) {
-            for (int col = 0; col < world.getColumnCount(); col++) {
-                add(world.getCellAt(row, col));
+        for (int col = 0; col < world.getColumnCount(); col++) {
+            for (int row = 0; row < world.getRowCount(); row++) {
+                add(world.getCellAt(col, row));
             }
         }
 

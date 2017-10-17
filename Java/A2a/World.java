@@ -84,7 +84,7 @@ public class World {
      * @param colInput used for identifying specific Cell element in an array
      * @return one element of the cell array
      */
-    public Cell getCellAt(int rowInput, int colInput) {
+    public Cell getCellAt(int colInput, int rowInput) {
         return cell[colInput][rowInput];
     }
 

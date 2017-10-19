@@ -31,7 +31,7 @@ public class GameFrame extends JFrame {
      * initializes GameFrame.
      */
     public void init() {
-        setTitle("Assignment 2aMine");
+        setTitle("Assignment 2a");
         setLayout(new GridLayout(world.getColumnCount(), world.getRowCount()));
 
         for (int col = 0; col < world.getColumnCount(); col++) {

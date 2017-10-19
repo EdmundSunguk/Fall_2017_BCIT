@@ -12,12 +12,12 @@ import java.awt.Toolkit;
  */
 public class World {
     
-    private static final int MAX_PERCENTAGE = 100;
+    private static final int MAX_PERCENTAGE = 99;
     private static final int PERCENTAGE_HERBIVORE = 80;
     private static final int PERCENTAGE_PLANT = 50;
     private static final Toolkit TOOLKIT = Toolkit.getDefaultToolkit();;
-    private final int width;
-    private final int height;
+    private final int widthOfCell;
+    private final int heightOfCell;
     private final Cell[][] cell;
     private int worldSizeRow;
     private int worldSizeColumn;
@@ -31,8 +31,8 @@ public class World {
         
         final Dimension screenSize;
         screenSize = TOOLKIT.getScreenSize();
-        width = screenSize.width / worldSize2;
-        height = screenSize.height / worldSize;
+        widthOfCell = screenSize.width / worldSize2;
+        heightOfCell = screenSize.height / worldSize;
         this.worldSizeRow = worldSize2;
         this.worldSizeColumn = worldSize;
         
@@ -51,12 +51,12 @@ public class World {
                 int randomNumber = RandomGenerator.nextNumber(MAX_PERCENTAGE);
                 if (randomNumber >= PERCENTAGE_HERBIVORE) {
                     cell[i][j] = new Herbivore(new Cell(this,
-                            width, height));
+                            widthOfCell, heightOfCell));
                 } else if (randomNumber >= PERCENTAGE_PLANT) {
                     cell[i][j] = new Plant(new Cell(this,
-                            width, height));
+                            widthOfCell, heightOfCell));
                 } else {
-                    cell[i][j] = new Cell(this, width, height);
+                    cell[i][j] = new Cell(this, widthOfCell, heightOfCell);
                 }
             }
         }

@@ -238,5 +238,28 @@ SELECT guestName,
                 LEFT JOIN Hotel h 
                     ON h.hotelNo = b.hotelNo
                         WHERE h.hotelName = 'Meridian Hotel');
+--
+--testing
+-- SELECT guestNo from booking where hotelNo is (1 or 8) and 6 and not 2
+SELECT guestNo
+    FROM Booking
+    WHERE (hotelNo = 1 OR hotelNo = 8)
+        AND hotelNo = 6
+        AND hotelNo != 2
+;
+--
+SELECT guestNo
+    FROM Booking
+    WHERE hotelNo = 1 OR hotelNo = 8
+INTERSECT
+SELECT guestNo
+    FROM Booking
+    WHERE hotelNo = 6
+MINUS
+SELECT guestNo
+    FROM Booking
+    WHERE hotelNo = 2
+;
+--
 SPOOL OFF
 -- start Asn3_LayC_HamS.sql

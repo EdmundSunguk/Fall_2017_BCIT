@@ -49,25 +49,21 @@ int get_word(const char prompt[], char word[], size_t n) {
 check the first char
 check the 1-8*/
 int is_valid_id(const char s[]) {
-    size_t maxLength = 9;
-    int boolean = 0;
     int i = 0;
-    int length = strlen(s);
 
-    if (strlen(s) == maxLength) {
-        if (s[0] == 'A' || s[0] == 'a') {
-            for (i = 1; i < length; i++) {
-                if (isdigit(s[i])) {
-                    boolean = 1;
-                }
-            }
-        }
-    }
-    if (boolean) {
-        printf("%s\n", s);
-        return 1;
-    } else {
+    if (strlen(s) != 9) {
         return 0;
     }
+    
+    if (s[0] != 'a' && s[0] != 'A') {
+        return 0;
+    }
+    
+    for (i = 1; i < 9; i++) {
+        if (!isdigit(s[i])) {
+            return 0;
+        }
+    }
+    return 1;
 }
 

@@ -11,8 +11,6 @@ import java.util.ArrayList;
  * @version 1.0
  */
 public class Herbivore extends Creature {
-
-    private static final Color HERBIVORE_COLOR = Color.yellow;
     private static final int MAX_LIFE = 10;
     private World world;
     private Cell location;
@@ -31,9 +29,9 @@ public class Herbivore extends Creature {
      * @param location of the herbivore
      */
     public Herbivore(Cell location) {
-        super(location);
-        world = location.getWorld();
+//        super(location);
         this.location = location;
+        world = location.getWorld();
         row = location.getRow();
         column = location.getColumn();
         lifeForm = LifeForm.HERBIVORE;
@@ -55,7 +53,6 @@ public class Herbivore extends Creature {
                 newLocation = adjacentPlantCells[randomNum];
                 location.removeHerbivore();
                 location = newLocation;
-//                newLocation.removeHerbivore();
                 location.setHerbivore(this);
                 deathCounter = 0;
             } else {
@@ -64,27 +61,10 @@ public class Herbivore extends Creature {
                 newLocation = adjacentNatureCells[randomNum];
                 location.removeHerbivore();
                 location = newLocation;
-//                newLocation.removeHerbivore();
                 location.setHerbivore(this);
                 deathCounter++;
             }
         }
-    }
-    
-    /**
-     * sets deathCounter.
-     * @param deathCounter of the herbivore
-     */
-    public void setDeathCounter(int deathCounter) {
-        this.deathCounter = deathCounter;
-    }
-    
-    /**
-     * gets deathCounter.
-     * @return deathCounter
-     */
-    public int getDeathCounter() {
-        return deathCounter;
     }
     
     private boolean die() {
@@ -111,7 +91,7 @@ public class Herbivore extends Creature {
             for (int i = 0; i < adjacentCells.length; i++) {
                 if (adjacentCells[i].getLifeForm() == LifeForm.NATURE) {
                     tempNatureCells.add(adjacentCells[i]);
-                }                
+                }
             }
         }
 

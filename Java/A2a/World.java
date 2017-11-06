@@ -26,7 +26,7 @@ public class World {
      */
     public World(int worldSize, int worldSize2) {
         this.worldSizeRow = worldSize2;
-        this.worldSizeColumn = worldSize;   
+        this.worldSizeColumn = worldSize;
         cell = new Cell[worldSizeColumn][worldSizeRow];
     }
 
@@ -92,7 +92,7 @@ public class World {
         for (int i = 0; i < cell.length; i++) {
             for (int j = 0; j < cell[0].length; j++) {
                 if (cell[i][j].getCreature() != null) {
-                    cell[i][j].getCreature().setBaby(false);                                    
+                    cell[i][j].getCreature().setBaby(false);
                 }
             }
         }

@@ -19,6 +19,7 @@ public class Plant extends Creature {
     private int column;
     private LifeForm lifeForm;
     private Cell[] adjacentCells;
+    private Cell newLocation;
     private boolean baby;
     
     /**
@@ -26,11 +27,11 @@ public class Plant extends Creature {
      * @param location of the plant
      */
     public Plant(Cell location) {
-        super(location);
+//        super(location);
+        this.location = location;
+        world = location.getWorld();
         row = location.getRow();
         column = location.getColumn();
-        world = location.getWorld();
-        this.location = location;
         lifeForm = LifeForm.PLANT;
         baby = true;
     }
@@ -62,7 +63,9 @@ public class Plant extends Creature {
                     && this.countNearPlant(adjacentCells[randomNum]) >= 2
                     && this.countNearNature(adjacentCells[randomNum])
                     >= MIN_EMPTY_ADJACENT_CELL) {
+//                newLocation = adjacentCells[randomNum];
                 adjacentCells[randomNum].setPlant(this);
+//                newLocation.setPlant(this);
                 break;
             }            
         }

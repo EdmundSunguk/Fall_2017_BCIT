@@ -73,6 +73,7 @@ public class Cell extends JPanel {
         }
         if (getLifeForm() == LifeForm.NATURE) {
 //            System.out.println(getLifeForm());
+            creature = null;
             this.setBackground(CELL_COLOR);
         }
     }
@@ -94,8 +95,8 @@ public class Cell extends JPanel {
     }
     
     /**
-     * gets lifeForm enum type.
-     * @return lifeForm enum type
+     * gets Point Location.
+     * @return location which is a Point object
      */
     public Point getLocation() {
         return location;
@@ -159,17 +160,17 @@ public class Cell extends JPanel {
      * @param plant object which acts like plants
      */
     public void setPlant(Plant plant) {
+        lifeForm = LifeForm.PLANT;
         creature = plant;
         creature.setBaby(true);
-        lifeForm = LifeForm.PLANT;
     }
     
     /**
      * removes plant object.
      */
     public void removePlant() {
-        this.creature = null;
         lifeForm = LifeForm.NATURE;
+        creature = null;
     }
     
     /**
@@ -177,16 +178,16 @@ public class Cell extends JPanel {
      * @param herbivore object which acts like herbivore
      */
     public void setHerbivore(Herbivore herbivore) {
+        lifeForm = LifeForm.HERBIVORE;
         creature = herbivore;
         creature.setBaby(true);
-        lifeForm = LifeForm.HERBIVORE;
     }
     
     /**
      * removes herbivore object.
      */
     public void removeHerbivore() {
-        this.creature = null;            
         lifeForm = LifeForm.NATURE;
+        creature = null;            
     }
 }

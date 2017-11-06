@@ -1,7 +1,5 @@
 package ca.bcit.comp2526.a2a;
 
-import java.awt.Color;
-
 /**
  * World.java
  * World class that construct the world of cells.
@@ -14,9 +12,9 @@ public class World {
     private static final int MAX_PERCENTAGE = 100;
     private static final int PERCENTAGE_HERBIVORE = 80;
     private static final int PERCENTAGE_PLANT = 50;
-    private Cell[][] cell;
-    private int worldSizeRow;
-    private int worldSizeColumn;
+    private final Cell[][] cell;
+    private final int worldSizeRow;
+    private final int worldSizeColumn;
     private int random;
 
     /**
@@ -40,13 +38,10 @@ public class World {
                 random = RandomGenerator.nextNumber(MAX_PERCENTAGE);
                 cell[i][j] = new Cell(this, i, j);
                 if (random > PERCENTAGE_HERBIVORE) {
-//                    cell[i][j] = new Herbivore(new Cell(this, i, j));
                     cell[i][j].setLifeForm(LifeForm.HERBIVORE);
                 } else if (random > PERCENTAGE_PLANT) {
-//                    cell[i][j] = new Plant(new Cell(this, i, j));
                     cell[i][j].setLifeForm(LifeForm.PLANT);
                 } else {
-//                    cell[i][j] = new Cell(this, i, j);
                     cell[i][j].setLifeForm(LifeForm.NATURE);
                 }
                 cell[i][j].init();
@@ -77,9 +72,6 @@ public class World {
      * @return one element of the cell array
      */
     public Cell getCellAt(int colInput, int rowInput) {
-        
-//        System.out.println(cell[colInput][rowInput].getClass());
-//        System.out.println(cell[colInput][rowInput].getLifeForm());
         return cell[colInput][rowInput];
     }
     
@@ -91,24 +83,39 @@ public class World {
     public void takeTurn() {
         for (int i = 0; i < cell.length; i++) {
             for (int j = 0; j < cell[0].length; j++) {
-                if (cell[i][j].getCreature() != null) {
+                if (cell[i][j].getLifeForm() != LifeForm.NATURE) {
                     cell[i][j].getCreature().setBaby(false);
+                }
+            }
+        }
+        for (int i = 0; i < cell.length; i++) {
+            for (int j = 0; j < cell[0].length; j++) {
+                if (cell[i][j].getLifeForm() == LifeForm.HERBIVORE
+                        && !cell[i][j].getCreature().getBaby()) {
+                    cell[i][j].getCreature().die();
+                }
+            }
+        }
+        for (int i = 0; i < cell.length; i++) {
+            for (int j = 0; j < cell[0].length; j++) {
+                if (cell[i][j].getLifeForm() == LifeForm.PLANT
+                        && !cell[i][j].getCreature().getBaby()) {
+                    cell[i][j].getCreature().act();
+                }
+            }
+        }
+        for (int i = 0; i < cell.length; i++) {
+            for (int j = 0; j < cell[0].length; j++) {
+                if (cell[i][j].getLifeForm() == LifeForm.HERBIVORE
+                        && !cell[i][j].getCreature().getBaby()) {
+                    cell[i][j].getCreature().act();
                 }
             }
         }
         for (int i = 0; i < worldSizeColumn; i++) {
             for (int j = 0; j < worldSizeRow; j++) {
-                cell[i][j].takeTurn();
                 cell[i][j].init();
             }
         }
-//        System.out.println("-----------------");
-//        System.out.println(cell[0][0].getClass());
-//        System.out.println(cell[0][0].getLifeForm());
-//        cell[0][0].setLifeForm(LifeForm.NATURE);
-//        cell[0][0].init();
-//        cell[0][0].takeTurn();
-//        System.out.println(cell[0][0].getLifeForm());
-//        System.out.println(cell[0][0].getClass());
     }   
 }

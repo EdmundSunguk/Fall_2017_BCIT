@@ -2,7 +2,7 @@ package ca.bcit.comp2526.a2a;
 
 /**
  * LifeForm.java
- * LifeForm enum that contains Plant, Herbivore, Nature
+ * LifeForm enum that contains Plant, Herbivore, Nature.
  * 
  * @author Sunguk (Edmund) Ham
  * @version 1.0

@@ -15,11 +15,16 @@ import javax.swing.JPanel;
  */
 public class Cell extends JPanel {
     
+    /**
+     * generated serial version ID.
+     */
+    private static final long serialVersionUID = 8764859018873039120L;
     private static final Color LINE_COLOR = Color.black;
     private static final Color CELL_COLOR = Color.white;
-//    private static int counter = 0;
-    private int row;
-    private int column;
+    private static final Color PLANT_COLOR = Color.green;
+    private static final Color HERBIVORE_COLOR = Color.yellow;
+    private final int row;
+    private final int column;
     private final World world;
     private final Point location;
     private Creature creature;
@@ -49,31 +54,16 @@ public class Cell extends JPanel {
     }
     
     /**
-     * called by world.takeTurn() method, make creature act if exists.
-     */
-    public void takeTurn() {
-        if (creature != null && !creature.getBaby()) {
-            creature.act();
-        }
-    }
-    
-    /**
      * initializes Cell, based on the type of the lifeForm.
      */
     public void init() {
-        if (getLifeForm() == LifeForm.PLANT) {
-//            System.out.println(getLifeForm());
-            creature = new Plant(this);
-            this.setBackground(Color.green);
+        if (lifeForm == LifeForm.PLANT) {
+            this.setBackground(PLANT_COLOR);
         }
-        if (getLifeForm() == LifeForm.HERBIVORE) {
-//            System.out.println(getLifeForm());
-            creature = new Herbivore(this);
-            this.setBackground(Color.yellow);
+        if (lifeForm == LifeForm.HERBIVORE) {
+            this.setBackground(HERBIVORE_COLOR);
         }
-        if (getLifeForm() == LifeForm.NATURE) {
-//            System.out.println(getLifeForm());
-            creature = null;
+        if (lifeForm == LifeForm.NATURE) {
             this.setBackground(CELL_COLOR);
         }
     }
@@ -92,6 +82,15 @@ public class Cell extends JPanel {
      */
     public void setLifeForm(LifeForm lifeForm) {
         this.lifeForm = lifeForm;
+        if (lifeForm == LifeForm.PLANT) {
+            creature = new Plant(this);
+        }
+        if (lifeForm == LifeForm.HERBIVORE) {
+            creature = new Herbivore(this);
+        }
+        if (lifeForm == LifeForm.NATURE) {
+            creature = null;
+        }
     }
     
     /**
@@ -113,9 +112,9 @@ public class Cell extends JPanel {
         for (int i = -1; i <= 1; i++) {
             for (int j = -1; j <= 1; j++) {
                 if (row + j >= 0 
-                        && row + j <= world.getRowCount()-1
+                        && row + j <= world.getRowCount() - 1
                         && column + i >= 0 
-                        && column + i <= world.getColumnCount()-1
+                        && column + i <= world.getColumnCount() - 1
                         && !(row + j == row
                         && column + i == column)) {
                     tempCells.add(world.getCellAt(column + i, row + j));

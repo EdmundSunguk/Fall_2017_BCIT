@@ -1,6 +1,5 @@
 package ca.bcit.comp2526.a2a;
 
-import java.awt.Color;
 import java.util.ArrayList;
 
 /**
@@ -11,42 +10,32 @@ import java.util.ArrayList;
  * @version 1.0
  */
 public class Herbivore extends Creature {
+    /**
+     * generated serial version ID.
+     */
+    private static final long serialVersionUID = -5368556016946522358L;
     private static final int MAX_LIFE = 10;
-    private World world;
     private Cell location;
-    private int row;
-    private int column;
-    private LifeForm lifeForm;
-    private int deathCounter;
     private Cell newLocation;
     private Cell[] adjacentCells;
     private Cell[] adjacentPlantCells;
     private Cell[] adjacentNatureCells;
-    private boolean baby;
     
     /**
      * Construct Herbivore object.
      * @param location of the herbivore
      */
     public Herbivore(Cell location) {
-//        super(location);
+        super(location);
         this.location = location;
-        world = location.getWorld();
-        row = location.getRow();
-        column = location.getColumn();
-        lifeForm = LifeForm.HERBIVORE;
-        baby = true;
-        if (location.getCreature() != null) {
-            deathCounter = location.getCreature().getDeathCounter();            
-        }
     }
     
     /**
-     * acts like herbivore. i.e. eats plants or moves.
+     * acts like herbivore. ie. eats plants or moves.
      */
     public void act() {
         int randomNum;
-        if (!this.die()) {
+        if (!getBaby()) {
             if (this.detectPlant()) {
                 randomNum = RandomGenerator.nextNumber(
                         adjacentPlantCells.length);
@@ -54,7 +43,7 @@ public class Herbivore extends Creature {
                 location.removeHerbivore();
                 location = newLocation;
                 location.setHerbivore(this);
-                deathCounter = 0;
+                setDeathCounter(0);
             } else {
                 randomNum = RandomGenerator.nextNumber(
                         adjacentNatureCells.length);
@@ -62,18 +51,18 @@ public class Herbivore extends Creature {
                 location.removeHerbivore();
                 location = newLocation;
                 location.setHerbivore(this);
-                deathCounter++;
+                incrementDeathCounter();
             }
         }
     }
     
-    private boolean die() {
-        if (this.deathCounter == MAX_LIFE) {
+    /**
+     * make herbivore dead when it starves more than 10 turns.
+     */
+    public void die() {
+        if (getDeathCounter() == MAX_LIFE) {
             location.removeHerbivore();
-            System.out.println("die!");
-            return true;
         }
-        return false;
     }
     
     private boolean detectPlant() {

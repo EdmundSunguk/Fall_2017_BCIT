@@ -1,7 +1,5 @@
 package ca.bcit.comp2526.a2a;
 
-import java.awt.Color;
-
 /**
  * Plant.java
  * Plant that extends creature and acts like plants.
@@ -11,29 +9,21 @@ import java.awt.Color;
  */
 public class Plant extends Creature {
 
-    private static final Color PLANT_COLOR = Color.green;
+    /**
+     * generated serial version ID.
+     */
+    private static final long serialVersionUID = 830996314285288714L;
     private static final int MIN_EMPTY_ADJACENT_CELL = 3;
-    private World world;
-    private Cell location;
-    private int row;
-    private int column;
-    private LifeForm lifeForm;
+    private final Cell location;
     private Cell[] adjacentCells;
-    private Cell newLocation;
-    private boolean baby;
     
     /**
      * Construct Plant object.
      * @param location of the plant
      */
     public Plant(Cell location) {
-//        super(location);
+        super(location);
         this.location = location;
-        world = location.getWorld();
-        row = location.getRow();
-        column = location.getColumn();
-        lifeForm = LifeForm.PLANT;
-        baby = true;
     }
     
     /**
@@ -53,35 +43,40 @@ public class Plant extends Creature {
     }
     
     /**
+     * Empty method for the future use.
+     */
+    public void die() {
+        
+    }
+    
+    /**
      * acts like plants i.e. seeds to the empty cells.
      */
     public void act() {
         adjacentCells = location.getAdjacentCells();
+        int randomNum = RandomGenerator.nextNumber(adjacentCells.length);
         for (int i = 0; i < adjacentCells.length; i++) {
-            int randomNum = RandomGenerator.nextNumber(adjacentCells.length);
-            if (!this.isHerbivore(adjacentCells[randomNum])
-                    && this.countNearPlant(adjacentCells[randomNum]) >= 2
-                    && this.countNearNature(adjacentCells[randomNum])
+            if (this.isEmpty(adjacentCells[randomNum])
+                    && this.countNearPlant() >= 2
+                    && this.countNearNature()
                     >= MIN_EMPTY_ADJACENT_CELL) {
-//                newLocation = adjacentCells[randomNum];
                 adjacentCells[randomNum].setPlant(this);
-//                newLocation.setPlant(this);
                 break;
             }            
         }
     }
     
-    private boolean isHerbivore(Cell target) {
-            if (target.getLifeForm() == LifeForm.HERBIVORE) {
+    private boolean isEmpty(Cell target) {
+            if (target.getLifeForm() == LifeForm.NATURE) {
                 return true;
             }
         return false;
     }
     
-    private int countNearPlant(Cell target) {
+    private int countNearPlant() {
         int counter = 0;
         
-        Cell[] adjacentTempCells = target.getAdjacentCells();
+        Cell[] adjacentTempCells = this.getAdjacentCells();
         for (int i = 0; i < adjacentTempCells.length; i++) {
             if (adjacentTempCells[i].getLifeForm() == LifeForm.PLANT) {
                 counter++;
@@ -91,10 +86,10 @@ public class Plant extends Creature {
         return counter;
     }
     
-    private int countNearNature(Cell target) {
+    private int countNearNature() {
         int counter = 0;
         
-        Cell[] adjacentTempCells = target.getAdjacentCells();
+        Cell[] adjacentTempCells = this.getAdjacentCells();
         for (int i = 0; i < adjacentTempCells.length; i++) {
             if (adjacentTempCells[i].getLifeForm() == LifeForm.NATURE) {
                 counter++;

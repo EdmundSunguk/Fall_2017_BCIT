@@ -8,7 +8,7 @@ package ca.bcit.comp2526.a2a;
  * @author Sunguk (Edmund) Ham
  * @version 1.0
  */
-public abstract class Creature {
+public abstract class Creature extends Cell {
     
     /**
      * generated serial ID by Eclipse.
@@ -16,15 +16,15 @@ public abstract class Creature {
     private static final long serialVersionUID = -5673370150154959071L;
     private boolean baby;
     private int deathCounter;
-//    
-//    /**
-//     * Construct Creature object.
-//     * @param location of the Creature
-//     */
-//    public Creature(Cell location) {
-//        super(location.getWorld(), location.getColumn(), location.getRow());
-//        // TODO Auto-generated constructor stub
-//    }
+    
+    /**
+     * Construct Creature object.
+     * @param location of the Creature
+     */
+    public Creature(Cell location) {
+        super(location.getWorld(), location.getColumn(), location.getRow());
+        baby = true;
+    }
     
     /**
      * gets baby variable.
@@ -49,11 +49,23 @@ public abstract class Creature {
     }
     
     /**
+     * makes old creatures dead.
+     */
+    public abstract void die();
+    
+    /**
      * sets deathCounter of the creature.
      * @param deathCounter of the creature
      */
     public void setDeathCounter(int deathCounter) {
         this.deathCounter = deathCounter;
+    }
+    
+    /**
+     * increments deathCounter of the creature.
+     */
+    public void incrementDeathCounter() {
+        deathCounter++;
     }
     
     /**

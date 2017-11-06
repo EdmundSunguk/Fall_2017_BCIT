@@ -1,6 +1,7 @@
 package ca.bcit.comp2526.a2a;
 
 import java.awt.GridLayout;
+
 import javax.swing.JFrame;
 
 /**
@@ -32,10 +33,10 @@ public class GameFrame extends JFrame {
      */
     public void init() {
         setTitle("Assignment 2a");
-        setLayout(new GridLayout(world.getColumnCount(), world.getRowCount()));
+        setLayout(new GridLayout(world.getRowCount(), world.getColumnCount()));
 
-        for (int col = 0; col < world.getColumnCount(); col++) {
-            for (int row = 0; row < world.getRowCount(); row++) {
+        for (int col = 0; col < world.getRowCount(); col++) {
+            for (int row = 0; row < world.getColumnCount(); row++) {
                 add(world.getCellAt(col, row));
             }
         }

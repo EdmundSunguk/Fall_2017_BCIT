@@ -1,56 +1,104 @@
 package ca.bcit.comp2526.a2a;
 
 import java.awt.Color;
-import java.awt.Component;
-import java.awt.Graphics;
-
-import javax.swing.JComponent;
 
 /**
  * Plant.java
- * Plant that extends cell and acts like plants.
+ * Plant that extends creature and acts like plants.
  * 
  * @author Sunguk (Edmund) Ham, A00979841
  * @version 1.0
  */
-public class Plant extends Cell {
+public class Plant extends Creature {
 
     private static final Color PLANT_COLOR = Color.green;
-    private static final Color LINE_COLOR = Color.black;
+    private static final int MIN_EMPTY_ADJACENT_CELL = 3;
     private World world;
     private Cell location;
     private int row;
     private int column;
+    private LifeForm lifeForm;
+    private Cell[] adjacentCells;
+    private boolean baby;
     
     /**
-     * 
-     * @param location
+     * Construct Plant object.
+     * @param location of the plant
      */
     public Plant(Cell location) {
-        super(location.getWorld(), location.getRow(), location.getColumn());
+        super(location);
         row = location.getRow();
         column = location.getColumn();
         world = location.getWorld();
         this.location = location;
-        repaint();
+        lifeForm = LifeForm.PLANT;
+        baby = true;
     }
     
-    public void paintComponent(Graphics g) {
-        g.setColor(PLANT_COLOR);
-        g.fillRect(0, 0, row, column);
-        g.setColor(LINE_COLOR);
-        g.drawRect(0, 0, row, column);
-    }
-    
-    public void init() {
+    /**
+     * Empty method for the future use.
+     * @param deathCounter of the plant
+     */
+    public void setDeathCounter(int deathCounter) {
         
     }
     
-    public void setCell(Cell location) {
-        
+    /**
+     * Empty method for the future use.
+     * @return deathCoutner
+     */
+    public int getDeathCounter() {
+        return 0;
     }
     
-    public void seed() {
-        
+    /**
+     * acts like plants i.e. seeds to the empty cells.
+     */
+    public void act() {
+        adjacentCells = location.getAdjacentCells();
+        for (int i = 0; i < adjacentCells.length; i++) {
+            int randomNum = RandomGenerator.nextNumber(adjacentCells.length);
+            if (!this.isHerbivore(adjacentCells[randomNum])
+                    && this.countNearPlant(adjacentCells[randomNum]) >= 2
+                    && this.countNearNature(adjacentCells[randomNum])
+                    >= MIN_EMPTY_ADJACENT_CELL) {
+                adjacentCells[randomNum].setPlant(this);
+                break;
+            }            
+        }
     }
+    
+    private boolean isHerbivore(Cell target) {
+            if (target.getLifeForm() == LifeForm.HERBIVORE) {
+                return true;
+            }
+        return false;
+    }
+    
+    private int countNearPlant(Cell target) {
+        int counter = 0;
+        
+        Cell[] adjacentTempCells = target.getAdjacentCells();
+        for (int i = 0; i < adjacentTempCells.length; i++) {
+            if (adjacentTempCells[i].getLifeForm() == LifeForm.PLANT) {
+                counter++;
+            }
+        }
+        
+        return counter;
+    }
+    
+    private int countNearNature(Cell target) {
+        int counter = 0;
+        
+        Cell[] adjacentTempCells = target.getAdjacentCells();
+        for (int i = 0; i < adjacentTempCells.length; i++) {
+            if (adjacentTempCells[i].getLifeForm() == LifeForm.NATURE) {
+                counter++;
+            }
+        }
+        
+        return counter;
+    }
+    
 }

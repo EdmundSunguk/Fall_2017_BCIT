@@ -73,7 +73,7 @@ public final class Main {
         screenSize = TOOLKIT.getScreenSize();
 
         Point centrePoint = new Point((screenSize.width - size.width) / 2,
-                (screenSize.height - size.height / 2));
+                (screenSize.height - size.height) / 2);
         return centrePoint;
     }
 

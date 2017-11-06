@@ -1,60 +1,130 @@
 package ca.bcit.comp2526.a2a;
 
 import java.awt.Color;
-import java.awt.Graphics;
+import java.util.ArrayList;
 
 /**
  * Herbivore.java
- * Herbivore that extends cell and acts like Herbivore.
+ * Herbivore that extends Creature and acts like Herbivore.
  * 
  * @author Sunguk (Edmund) Ham, A00979841
  * @version 1.0
  */
-public class Herbivore extends Cell {
+public class Herbivore extends Creature {
 
     private static final Color HERBIVORE_COLOR = Color.yellow;
-    private static final Color LINE_COLOR = Color.black;
+    private static final int MAX_LIFE = 10;
     private World world;
     private Cell location;
     private int row;
     private int column;
+    private LifeForm lifeForm;
+    private int deathCounter;
+    private Cell newLocation;
+    private Cell[] adjacentCells;
+    private Cell[] adjacentPlantCells;
+    private Cell[] adjacentNatureCells;
+    private boolean baby;
     
     /**
-     * 
-     * @param location
+     * Construct Herbivore object.
+     * @param location of the herbivore
      */
     public Herbivore(Cell location) {
-        super(location.getWorld(), location.getRow(), location.getColumn());
+        super(location);
         world = location.getWorld();
         this.location = location;
         row = location.getRow();
         column = location.getColumn();
+        lifeForm = LifeForm.HERBIVORE;
+        baby = true;
+        if (location.getCreature() != null) {
+            deathCounter = location.getCreature().getDeathCounter();            
+        }
     }
     
-    public void paintComponent(Graphics g) {
-        g.setColor(HERBIVORE_COLOR);
-        g.fillRect(0, 0, row, column);
-        g.setColor(LINE_COLOR);
-        g.drawRect(0, 0, row, column);
+    /**
+     * acts like herbivore. i.e. eats plants or moves.
+     */
+    public void act() {
+        int randomNum;
+        if (!this.die()) {
+            if (this.detectPlant()) {
+                randomNum = RandomGenerator.nextNumber(
+                        adjacentPlantCells.length);
+                newLocation = adjacentPlantCells[randomNum];
+                location.removeHerbivore();
+                location = newLocation;
+//                newLocation.removeHerbivore();
+                location.setHerbivore(this);
+                deathCounter = 0;
+            } else {
+                randomNum = RandomGenerator.nextNumber(
+                        adjacentNatureCells.length);
+                newLocation = adjacentNatureCells[randomNum];
+                location.removeHerbivore();
+                location = newLocation;
+//                newLocation.removeHerbivore();
+                location.setHerbivore(this);
+                deathCounter++;
+            }
+        }
     }
     
-    public void setCell(Cell location) {
+    /**
+     * sets deathCounter.
+     * @param deathCounter of the herbivore
+     */
+    public void setDeathCounter(int deathCounter) {
+        this.deathCounter = deathCounter;
     }
     
-    public void move() {
-        eat();
+    /**
+     * gets deathCounter.
+     * @return deathCounter
+     */
+    public int getDeathCounter() {
+        return deathCounter;
     }
     
-    private void eat() {
+    private boolean die() {
+        if (this.deathCounter == MAX_LIFE) {
+            location.removeHerbivore();
+            System.out.println("die!");
+            return true;
+        }
+        return false;
+    }
+    
+    private boolean detectPlant() {
+        ArrayList<Cell> tempPlantCells = new ArrayList<Cell>();
+        ArrayList<Cell> tempNatureCells = new ArrayList<Cell>();
+        adjacentCells = location.getAdjacentCells();
+
+        for (int i = 0; i < adjacentCells.length; i++) {
+            if (adjacentCells[i].getLifeForm() == LifeForm.PLANT) {
+                tempPlantCells.add(adjacentCells[i]);
+            }
+        }
         
-    }
-    
-    public void detectPlant() {
+        if (tempPlantCells.size() == 0) {
+            for (int i = 0; i < adjacentCells.length; i++) {
+                if (adjacentCells[i].getLifeForm() == LifeForm.NATURE) {
+                    tempNatureCells.add(adjacentCells[i]);
+                }                
+            }
+        }
+
+        adjacentPlantCells = new Cell[tempPlantCells.size()];
+        adjacentNatureCells = new Cell[tempNatureCells.size()];
+        for (int i = 0; i < adjacentPlantCells.length; i++) {
+            adjacentPlantCells[i] = tempPlantCells.get(i);
+        }
+        for (int i = 0; i < adjacentNatureCells.length; i++) {
+            adjacentNatureCells[i] = tempNatureCells.get(i);
+        }
         
-    }
-    
-    public void detectEmpty() {
-        
+        return (adjacentPlantCells.length >= 1);
     }
 
 }

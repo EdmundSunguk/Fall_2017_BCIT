@@ -79,6 +79,9 @@ void sort_score_desc_name_asc_id_asc(record a[], size_t n) {
     qsort(a, n, sizeof(a[0]), compareScoreDescNameAscIdAsc);
 }
 
+/*
+straight copy from lab 7 with slight modification
+*/
 int read_record(record prec[], size_t n) {
 
     char line[LINESIZE];
